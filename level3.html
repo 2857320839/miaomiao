@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>level3</title>
+	<style>
+		*{
+            margin: 0;
+            padding: 0;
+        }
+        .top{
+            display: flex;
+	        height: 40px;
+		    background-color: rgb(40, 114, 243);
+		    justify-content: space-between;
+		    align-items: center;
+		    color: white;
+        }
+        .top div:nth-child(1){
+            padding-left: 1rem;
+        }
+        .top div:nth-child(3){
+            padding-right: 1rem;
+        }
+        .time{
+		display: flex;
+		justify-content: center;
+		height: 30px;
+		align-items: center;
+		border-bottom: 2px solid rgb(240, 244, 252);
+		}
+        .time div:nth-child(1){
+		padding-right: 1rem;
+		}
+		.time div:nth-child(3){
+		padding-left: 1rem;
+		}
+        .content{
+            display: flex;
+            flex-direction: column;
+            font-size: 10px;
+            color: rgb(44, 120, 250);
+        }
+        .content>div{
+            display: flex;
+            margin-top: 5vh;
+        }
+        .content>div div:nth-child(1){
+            display: flex;
+            flex: 1;
+            justify-content: center;
+        }
+        .content>div div:nth-child(2){
+            display: flex;
+            flex: 2;
+            border-left: 1px solid rgb(203, 206, 212);
+            padding-left: 1rem;
+        }
+        .slide{
+			display: flex;
+            height: 10px;
+            width: 50px;
+			position: fixed;
+			bottom: 10vh;
+            right: 5vw;
+            border: 1px solid rgb(240, 244, 252);
+            justify-content: center;
+            align-items: center; 
+        }
+		.liebiao{
+			width: 100vw;
+			position: fixed;
+			top: 5vh;
+			opacity: 0;
+			background-color: rgb(253, 253, 253);
+		}
+		.liebiao div{
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			padding-bottom: 1vh;
+			border-bottom: 1px solid rgb(167, 173, 179);
+			margin-top: 2vh;
+			font-size: 10px;
+			color: rgb(72, 73, 75);
+		}
+	</style>
+</head>
+<body>
+	<div>
+		<div class="top">
+			<div><img src="../photo/img/a.jpg"></div>
+			<div>历史上的今天</div>
+			<div><img  id="menu" src="../photo/img/b.jpg"></div>
+		</div>
+		<div class="time">
+			<div><img src="../photo/img/c.jpg"></div>
+			<div id="date"></div>
+			<div><img src="../photo/img/d.jpg"></div>
+		</div>
+		<div class="content" id="content"></div>
+		<div class="slide">
+			<div><img src="../photo/img/e.jpg"></div>
+		</div>
+		<div class="liebiao" id="liebiao">
+			<div>电话区号查询</div>
+			<div>手机号码查询</div>
+			<div>万年历查询</div>
+			<div>北京时间查询</div>
+			<div>IP地址查询</div>
+		</div>
+	 </div>
+		<script>
+		 var date = document.getElementById('date');
+		 var content = document.getElementById('content');
+		 var menu = document.getElementById('menu');
+		 var liebiao = document.getElementById('liebiao');
+		 var flag = true;
+		 menu.onclick = function(){
+            flag = !flag ;         
+            liebiao.style.opacity = flag ? 0 : 1 ;
+            content.style.backgroundColor = flag ? "rgb(253,253,253)" : "rgb(175, 175, 174)";        }
+		 function getmsg(){
+	 var xhr = new XMLHttpRequest();
+	 xhr.open('GET','https://api.oick.cn/lishi/api.php');
+	 xhr.send();
+	 xhr.onreadystatechange =()=>{
+		 if(xhr.readyState === 4){
+			 if(xhr.status >=200 && xhr.status <300){
+			 var obj = JSON.parse(xhr.response).result;
+			 arr = JSON.parse(xhr.response).day.split("/ ")
+			 date.innerHTML = arr[0] + "月" + arr[1] + "日"
+			 obj.forEach((item,index) =>{
+				 var div1 = document.createElement('div');
+				 var div2 = document.createElement('div');
+				 var div3 = document.createElement('div');
+				 div2.innerHTML = item.date.split('年')[0]+'年';
+				 div3.innerHTML = item.title;
+				 content.append(div1);
+				 div1.append(div2);
+				 div1.append(div3);
+	 
+			 });
+		 }
+	 }
+		 }
+	 }
+	 getmsg();
+	 </script>
+</body>
+</html>
